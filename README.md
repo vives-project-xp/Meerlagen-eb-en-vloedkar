@@ -7,5 +7,6 @@
 - Alberiek Depreytere: SCRUMmaster
 - William Rogov
 - Jonas De Rous
+- Vic Verbiest
 
 
