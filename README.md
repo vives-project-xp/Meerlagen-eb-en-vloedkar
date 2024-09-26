@@ -3,7 +3,7 @@
 # Opdracht
 
 
-## The team
+## Het team
 - Alberiek Depreytere: SCRUMmaster
 - William Rogov
 - Jonas De Rous
