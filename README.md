@@ -3,8 +3,8 @@
 # Opdracht
 
 
-## Het team
-- Alberiek Depreytere: SCRUMmaster
+## Het Team
+- [Alberiek Depreytere](https://github.com/AlberiekDepreytere) SCRUMmaster
 - William Rogov
 - Jonas De Rous
 - Vic Verbiest
