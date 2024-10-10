@@ -4,7 +4,7 @@
 Dit is het project Meerlangen eb- en vloedkar. Dit project is deel van het vak Project Experience van [VIVES](https://www.vives.be/en).
 Het doel van dit project is een proof of concept maken van een automatisch watersysteem om planten te laten groeien op een kar.
 
-## Table of content
+# Inhoud
 - [Probleemstelling](#probleemstelling)
 - [Opdracht](#opdracht)
 - [Hardware](#hardware)
