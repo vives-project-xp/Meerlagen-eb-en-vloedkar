@@ -38,6 +38,9 @@ Met deze combinatie van functionaliteit en eenvoud biedt de eb- en vloedkar een 
 - Flexibele buizen 10Mx16mm
 - Lichtsensor <vul type in als we het weten>
 
+# Software
+Voor dit project zullen we werken met Platform IO. Dit gebruiken we zodat we de library Adafruit Neopixel kunnen gebruiken om de LED's aan te sturen.
+
 ## Het Team
 - [Alberiek Depreytere](https://github.com/AlberiekDepreytere) SCRUMmaster
 - [William Rogov](https://github.com/Rwill03)
