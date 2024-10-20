@@ -1,0 +1,72 @@
+weerstanden buttons:
++5v
+|
+1.2K
+|
+BUTTON
+|
+---------------------------------------ESP
+|
+2.2K
+|
+GND
+
+R1 = 1.7 / 0.0015 = 1.1333
+R2 = 3.3 / 0.0015 = 2,200
+
+
+
+
+weerstanden pomp:
+
+output 3.3V
+
+U1= 12V
+i = 400mA
+					12V
+					|
+				       pomp
+					|
+ISP----Rb = 330ohm-------------------IRL540NPBF
+			|		|
+		      Rdown = 10Kohm	|	
+			|		|
+			gnd		gnd
+
+
+
+weerstanden water valve:
+
+					12V
+					|
+				       water valve
+					|
+ISP----Rb = 330ohm-------------------IRL540NPBF
+			|		|
+		      Rdown = 10Kohm	|	
+			|		|
+			gnd		gnd
+
+
+
+weerstanden bjt
+24 V
+(3.3V-0.7) x (33.333 µA) = 75 000, 7500 ohm
+BC547B	hFe = 150
+5mA = R = 4800ohm
+
+					24V
+					|
+				       3800 ohm
+					|
+ISP----Rb = 330ohm-------------------bjt
+			|		|
+		      Rdown = 10Kohm	1000 ohm
+			|		|
+			gnd		gnd
+
+
+
+
+
+

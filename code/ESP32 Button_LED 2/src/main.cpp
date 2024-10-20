@@ -10,7 +10,7 @@ unsigned long lastDebounceTime = 0;
 unsigned long debounceDelay = 50;
 int lastButtonState = LOW;
 int buttonState;
-int currentState = 0;
+int currentState = 0; // 0 = off, 1 = red, 2 = blue
 
 void setup() {
   pinMode(PIN_BUTTON_RED, INPUT);
@@ -29,16 +29,19 @@ void loop() {
     if (reading != buttonState) {
       buttonState = reading;
       if (buttonState == HIGH) {
+        // Cycle through states: off -> red -> blue -> off
         currentState++;
         if (currentState > 1) {
           currentState = 0;
         }
         
         if (currentState == 0) {
+          // Turn off the LED
           strip1.setPixelColor(0, strip1.Color(0, 0, 0));
         } else if (currentState == 1) {
+          // Set LED to red
           strip1.setPixelColor(0, strip1.Color(100, 30, 25));
-        }
+        } 
         
         strip1.show();
       }
