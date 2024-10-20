@@ -1,32 +1,24 @@
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
 
-
 #define PIN_BUTTON_RED 2
-// #define PIN_BUTTON_GREEN 1
-// #define PIN_BUTTON_YELLOW 2
 #define PIN_LEDSTRIP1 4
-// #define PIN_LEDSTRIP2 4
 
 Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(60, PIN_LEDSTRIP1, NEO_GRB + NEO_KHZ800);
-// Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(60, PIN_LEDSTRIP2, NEO_GRB + NEO_KHZ800);
 
 unsigned long lastDebounceTime = 0;
 unsigned long debounceDelay = 50;
 int lastButtonState = LOW;
 int buttonState;
-
+int currentState = 0;
 
 void setup() {
   pinMode(PIN_BUTTON_RED, INPUT);
-
   strip1.begin();
   strip1.show();
-
 }
 
 void loop() {
-
   int reading = digitalRead(PIN_BUTTON_RED);
 
   if (reading != lastButtonState) {
@@ -37,10 +29,17 @@ void loop() {
     if (reading != buttonState) {
       buttonState = reading;
       if (buttonState == HIGH) {
-        strip1.setPixelColor(0, strip1.Color(255, 0, 0));
-        strip1.show();
-      } else {
-        strip1.setPixelColor(0, strip1.Color(0, 0, 0));
+        currentState++;
+        if (currentState > 1) {
+          currentState = 0;
+        }
+        
+        if (currentState == 0) {
+          strip1.setPixelColor(0, strip1.Color(0, 0, 0));
+        } else if (currentState == 1) {
+          strip1.setPixelColor(0, strip1.Color(100, 30, 25));
+        }
+        
         strip1.show();
       }
     }
