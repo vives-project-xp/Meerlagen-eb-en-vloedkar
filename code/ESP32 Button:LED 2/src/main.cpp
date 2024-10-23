@@ -31,7 +31,7 @@ void loop() {
       if (buttonState == HIGH) {
         // Cycle through states: off -> red -> blue -> off
         currentState++;
-        if (currentState > 2) {
+        if (currentState > 1) {
           currentState = 0;
         }
         
@@ -40,11 +40,8 @@ void loop() {
           strip1.setPixelColor(0, strip1.Color(0, 0, 0));
         } else if (currentState == 1) {
           // Set LED to red
-          strip1.setPixelColor(0, strip1.Color(255, 0, 0));
-        } else if (currentState == 2) {
-          // Set LED to blue
-          strip1.setPixelColor(0, strip1.Color(0, 0, 255));
-        }
+          strip1.setPixelColor(0, strip1.Color(100, 30, 25));
+        } 
         
         strip1.show();
       }
