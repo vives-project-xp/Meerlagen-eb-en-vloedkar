@@ -32,8 +32,26 @@ void loop() {
     if (reading != buttonState) {
       buttonState = reading;
       if (buttonState == HIGH) {
+<<<<<<< HEAD:code/ESP32 Button_LED 2/src/main.cpp
+        // Cycle through states: off -> red -> blue -> off
+        Serial.println("Button pressed");
+        currentState++;
+        if (currentState > 1) {
+          currentState = 0;
+        }
+        
+        if (currentState == 0) {
+          // Turn off the LED
+          strip1.setPixelColor(0, strip1.Color(0, 0, 0));
+        } else if (currentState == 1) {
+          // Set LED to red
+          strip1.setPixelColor(0, strip1.Color(100, 30, 25));
+        } 
+        
+=======
         // Turn on the LED and open the water valve
         strip1.setPixelColor(0, strip1.Color(255, 0, 0)); // Red LED on
+>>>>>>> 9a2a968f4f2fc149e4e10f2a2459a635ae42a128:code/ESP32 WaterVentiel/src/main.cpp
         strip1.show();
         digitalWrite(PIN_WATER_VALVE, HIGH);  // Open water valve
       } else {
