@@ -31,6 +31,7 @@ void loop() {
 
   if (reading != lastButtonState) {
     lastDebounceTime = millis();
+    delay(50);
   }
 
   if ((millis() - lastDebounceTime) > debounceDelay) {
