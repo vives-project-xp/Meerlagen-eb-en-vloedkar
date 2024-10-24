@@ -30,6 +30,7 @@ void loop() {
       buttonState = reading;
       if (buttonState == HIGH) {
         // Cycle through states: off -> red -> blue -> off
+        Serial.println("Button pressed");
         currentState++;
         if (currentState > 1) {
           currentState = 0;
