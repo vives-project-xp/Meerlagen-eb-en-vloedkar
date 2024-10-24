@@ -57,18 +57,18 @@ Om het water to aan de planten te krijgen, moet gebruik worden gemaakt van een p
 Aangezien de esp niet genoeg stroom kan leveren om de pomp aan te sturen, moet er gebruik worden gemaakt van een mosfet. De mosfet die we hier voor gebruiken is de IRL540NPBF-ND. Met behulp van deze mosfet kunnen we de De 12 volt van de pomp schakelen met de 3.3 volt van de esp32.
 <img title="aansluiting pomp" src="/foto/esp32-pinout.png">
 
-## waterventiel
+## Waterventiel
 ### Beschrijving
 Om het  project volledig automatisch te kunnen laten werken, zijn er 5 waterventielen nodig. Deze ventielen zorgen ervoor dat het water naar de juiste plekken wordt geleid. De ventielen die we hiervoor gebruiken zijn de Water Valve-8mm-12VDC.
 
 Er zijn een aantal reden waarom we waterventielen gebruiken.
-- #### toevoer water reservoir
+- #### Toevoer water reservoir
 Wanneer het reservoir leeg is, is het de bedoeling dat er water wordt toegevoerd. Dir kan gebeuren door een waterventiel open te zetten van het reservoire van het project GreenhouseWateringSystem naar het reservoire ven onze kast.
-- #### afvoer water reservoir
+- #### Afvoer water reservoir
 Wanneer het water te vuil wordt of wanneer de voedingstoffen uit het water zijn verdwenen, moet water uit het reservoir worden afgevoerd. Dit kan de door een ventiel onderaan het reservoir open te zetten met een afvoer naar buiten.
-- #### afvoer water plantenbakken
+- #### Afvoer water plantenbakken
 Om het water uit de planetenbakken te legen, maken ook hier gebruik van een waterventiel. elk niveau  van de kast krijgen een eigen ventiel om op die manier volledige controle te krijgen over het waterpeil in de bakken. 
-- #### toevoer water 1ste plantenbak
+- #### Toevoer water 1ste plantenbak
 Voor het omhoog pomppen van water gebruiken we 1 pompen. De leiding naar de verschillende bakken wordt gesplitst om elke bak te kunnen berijken. Om te voorkomen dat het water altijd naar het eerste niveau gaat, gebruiken we een waterventiel om de toevoer van water op het eerste niveau te belemmern.
 
 ### Aansluiting
@@ -78,7 +78,8 @@ Ook voor de waterventielen is de 3.3 volt die de esp kan geven niet genoeg. Daar
 ## LEDstrip 24V
 
 
-## Lichtsensor <vul type in als we het weten>
+## Lichtsensor UPRtek PAR200
+De lichtsensor mochten we gebruiken van VIVES Roeselaere. Met deze sensor kunnen we heel wat info over het licht krijgen. Hiermee kunnen we ondermeer de CCT (Correlated Color Temperature), LUX (Verlichting) en de PPFD (Photosynthetic Photon Flux Density) meten. Dit is interessant om zo de LED's te meten, zodat we ervoor kunnen zorgen dat de uitstraling van de LED's correleert met de groei van de planten.
 
 # Software
 Voor dit project zullen we werken met Platform IO. Dit gebruiken we zodat we de library Adafruit Neopixel kunnen gebruiken om de LED's aan te sturen.
