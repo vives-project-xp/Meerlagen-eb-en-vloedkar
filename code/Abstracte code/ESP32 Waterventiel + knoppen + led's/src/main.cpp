@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
+#include <TimeLib.h>
+#include <TimeAlarms.h>
 
 #define PIN_INPUT_WATERPUMP 13
 #define PIN_OUTPUT_WATER 12
@@ -20,15 +22,22 @@ unsigned long debounceDelay = 50;
 unsigned long valveDelay = 10000; // 10 seconden in milliseconden
 unsigned long valve90Seconds = 90000; // 90 seconden in milliseconden
 unsigned long previousMillis[5] = {0, 0, 0, 0, 0};
-unsigned long valveTimer = 0; // Houdt tijd bij voor ventiel open/dicht tijd
-bool valve2Active = false; // Houdt bij of ventiel 2 open is
-bool valve3And4Active = false; // Houdt bij of ventiel 3 en 4 open zijn
+unsigned long valveTimer = 0;
+bool valve2Active = false;
+bool valve3And4Active = false;
 int buttonState[5] = {LOW, LOW, LOW, LOW, LOW};
 int lastButtonState[5] = {LOW, LOW, LOW, LOW, LOW};
 int ledState = 0; // 0 = uit, 1 = rood, 2 = groen
 bool killswitchActive = false;
 
 void setup() {
+
+  Serial.begin(115200);
+  setTime(8, 0, 0, 1, 11, 2024); 
+
+  Alarm.alarmRepeat(8, 0, 0, automaticProcess);
+  Alarm.alarmRepeat(20, 0, 0, automaticProcess);  
+
   // Configureer knoppen als ingangen
   for (int i = 0; i < 5; i++) {
     pinMode(PIN_INPUT_WATERPUMP + i, INPUT_PULLUP);
@@ -48,27 +57,26 @@ void setup() {
 void loop() {
   checkKillSwitch();
   if (!killswitchActive) {
-    for (int i = 0; i < 5; i++) {
-      int buttonPin = PIN_INPUT_WATERPUMP + i;
-      int reading = digitalRead(buttonPin);
+    Alarm.delay(0);
+  for (int i = 0; i < 5; i++) {
+    int buttonPin = PIN_INPUT_WATERPUMP + i;
+    int reading = digitalRead(buttonPin);
 
-      // Debounce de knop
-      if (reading != lastButtonState[i]) {
-        previousMillis[i] = millis();
-      }
-      if ((millis() - previousMillis[i]) > debounceDelay) {
-        if (reading != buttonState[i]) {
-          buttonState[i] = reading;
-          if (buttonState[i] == LOW) { // LOW betekent ingedrukt vanwege INPUT_PULLUP
-            handleButtonPress(i + 1);
-          }
+    // Debounce de knop
+    if (reading != lastButtonState[i]) {
+      previousMillis[i] = millis();
+    }
+    if ((millis() - previousMillis[i]) > debounceDelay) {
+      if (reading != buttonState[i]) {
+        buttonState[i] = reading;
+        if (buttonState[i] == LOW) { // LOW betekent ingedrukt vanwege INPUT_PULLUP
+          handleButtonPress(i + 1);
         }
       }
-      lastButtonState[i] = reading;
     }
+    lastButtonState[i] = reading;
   }
-
-  // Update voor knop 3's specifieke 90 seconden cyclus
+  }
   updateValveCycle();
 }
 
@@ -86,10 +94,9 @@ void handleButtonPress(int button) {
       break;
 
     case 3:
-      // Start de cyclus voor ventiel 2 en vervolgens 3 & 4
-      valveTimer = millis();  // Start de timer
+      valveTimer = millis();
       valve2Active = true;
-      digitalWrite(PIN_VALVE_INPUT, HIGH); // Open ventiel 2
+      digitalWrite(PIN_VALVE_INPUT, HIGH);
       break;
 
     case 4:
@@ -146,27 +153,29 @@ void killSwitch() {
   ledState = 0;
 }
 
-// Functie om de specifieke 90 seconden-cyclus van knop 3 te beheren
 void updateValveCycle() {
-  if (valve2Active) {
-    if (millis() - valveTimer >= valve90Seconds) {
-      // Sluit ventiel 2 na 90 seconden
-      digitalWrite(PIN_VALVE_INPUT, LOW);
-      valve2Active = false;
-      valveTimer = millis();  // Reset timer voor volgende stap
-      valve3And4Active = true;
-      
-      // Open ventielen 3 en 4
-      digitalWrite(PIN_VALVE_OUTPUT_UPPER, HIGH);
-      digitalWrite(PIN_VALVE_OUTPUT_LOWER, HIGH);
-    }
+  if (valve2Active && millis() - valveTimer >= valve90Seconds) {
+    digitalWrite(PIN_VALVE_INPUT, LOW);
+    valve2Active = false;
+    valveTimer = millis();
+    valve3And4Active = true;
+
+    digitalWrite(PIN_VALVE_OUTPUT_UPPER, HIGH);
+    digitalWrite(PIN_VALVE_OUTPUT_LOWER, HIGH);
   }
-  else if (valve3And4Active) {
-    if (millis() - valveTimer >= valve90Seconds) {
-      // Sluit ventielen 3 en 4 na 90 seconden
-      digitalWrite(PIN_VALVE_OUTPUT_UPPER, LOW);
-      digitalWrite(PIN_VALVE_OUTPUT_LOWER, LOW);
-      valve3And4Active = false;
-    }
+  if (valve3And4Active && millis() - valveTimer > valve90Seconds) {
+    digitalWrite(PIN_VALVE_OUTPUT_UPPER, HIGH);
+    digitalWrite(PIN_VALVE_OUTPUT_LOWER, LOW);
+    valve3And4Active = false;
   }
 }
+
+void automaticProcess(){
+  if(!killswitchActive){
+    handleButtonPress(1);
+    handleButtonPress(2);
+    handleButtonPress(3);
+    handleButtonPress(4);
+  }
+}
+
