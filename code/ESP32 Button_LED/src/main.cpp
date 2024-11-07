@@ -38,14 +38,13 @@ void loop() {
     if (reading != buttonState) {
       buttonState = reading;
       if (buttonState == HIGH) {
-        strip1.setPixelColor(0, strip1.Color(255, 0, 0));
+        strip1.setPixelColor(0, strip1.Color(0, 0, 255,0));
         strip1.show();
       } else {
-        strip1.setPixelColor(0, strip1.Color(0, 0, 0));
+        strip1.setPixelColor(0, strip1.Color(0, 255, 0,0));
         strip1.show();
       }
     }
   }
 
-  lastButtonState = reading;
 }

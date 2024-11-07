@@ -2,10 +2,11 @@
 #include <Adafruit_NeoPixel.h>
 
 #define PIN_BUTTON_RED 2
-#define PIN_LEDSTRIP1 4
+#define PIN_LEDSTRIP 4
 #define PIN_WATER_VALVE 5 // Pin to control water valve (via relay)
 
-Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(60, PIN_LEDSTRIP1, NEO_GRB + NEO_KHZ800);
+
+Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(60, PIN_LEDSTRIP, NEO_GRB + NEO_KHZ800);
 
 unsigned long lastDebounceTime = 0;
 unsigned long debounceDelay = 50;

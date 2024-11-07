@@ -1,18 +1,18 @@
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
 
-#define PIN_BUTTON_1 13
-#define PIN_BUTTON_2 12
-#define PIN_BUTTON_3 14
-#define PIN_BUTTON_4 27
-#define PIN_BUTTON_5 26
+#define PIN_INPUT_WATERPUMP 13
+#define PIN_OUTPUT_WATER 12
+#define PIN_INPUT_WATERVALVE 14
+#define PIN_LED 27
+#define PIN_KILLSWITCH 26
 
 #define PIN_LEDSTRIP 25 // Pin voor LED-strip (NeoPixel)
-#define PIN_VALVE_1 33
-#define PIN_VALVE_2 32
-#define PIN_VALVE_3 23
-#define PIN_VALVE_4 22
-#define PIN_VALVE_5 21
+#define PIN_PUMP_VALVE 33
+#define PIN_VALVE_INPUT 32
+#define PIN_VALVE_OUTPUT_UPPER 23
+#define PIN_VALVE_OUTPUT_LOWER 22
+#define PIN_VALVE_OUTPUT 21
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, PIN_LEDSTRIP, NEO_GRB + NEO_KHZ800);
 
@@ -22,17 +22,18 @@ unsigned long previousMillis[5] = {0, 0, 0, 0, 0};
 int buttonState[5] = {LOW, LOW, LOW, LOW, LOW};
 int lastButtonState[5] = {LOW, LOW, LOW, LOW, LOW};
 int ledState = 0; // 0 = uit, 1 = rood, 2 = groen
+bool killswitchActive = false;
 
 void setup() {
   // Configureer knoppen als ingangen
   for (int i = 0; i < 5; i++) {
-    pinMode(PIN_BUTTON_1 + i, INPUT_PULLUP);
+    pinMode(PIN_INPUT_WATERPUMP + i, INPUT_PULLUP);
   }
 
   // Configureer ventielen als uitgangen
   for (int i = 0; i < 5; i++) {
-    pinMode(PIN_VALVE_1 + i, OUTPUT);
-    digitalWrite(PIN_VALVE_1 + i, LOW);  // Alle ventielen dicht
+    pinMode(PIN_PUMP_VALVE + i, OUTPUT);
+    digitalWrite(PIN_PUMP_VALVE + i, LOW);  // Alle ventielen dicht
   }
 
   // LED-strip configureren
@@ -41,9 +42,10 @@ void setup() {
 }
 
 void loop() {
-  // Lees elke knop in een loop
+  checkKillSwitch();
+  if (!killswitchActive) {
   for (int i = 0; i < 5; i++) {
-    int buttonPin = PIN_BUTTON_1 + i;
+    int buttonPin = PIN_INPUT_WATERPUMP + i;
     int reading = digitalRead(buttonPin);
 
     // Debounce de knop
@@ -60,23 +62,27 @@ void loop() {
     }
     lastButtonState[i] = reading;
   }
+  }
 }
 
 void handleButtonPress(int button) {
+  if (killswitchActive) {
+    return;
+  }
   switch (button) {
     case 1:
-      openValveForDuration(PIN_VALVE_1, valveDelay);
+      openValveForDuration(PIN_PUMP_VALVE, valveDelay);
       break;
 
     case 2:
-      openValveForDuration(PIN_VALVE_5, valveDelay);
+      openValveForDuration(PIN_VALVE_OUTPUT, valveDelay);
       break;
 
     case 3:
-      openValveForDuration(PIN_VALVE_2, valveDelay);
+      openValveForDuration(PIN_VALVE_INPUT, valveDelay);
       delay(valveDelay); // Wacht tot ventiel 2 dichtgaat
-      openValveForDuration(PIN_VALVE_3, valveDelay);
-      openValveForDuration(PIN_VALVE_4, valveDelay);
+      openValveForDuration(PIN_VALVE_OUTPUT_UPPER, valveDelay);
+      openValveForDuration(PIN_VALVE_OUTPUT_LOWER, valveDelay);
       break;
 
     case 4:
@@ -113,13 +119,23 @@ void toggleLEDStrip() {
   strip.show();
 }
 
+void checkKillSwitch(){
+  int switchState = digitalRead(PIN_KILLSWITCH);
+  if (switchState == HIGH && !killswitchActive){
+    killswitchActive = true;
+  } else if (switchState == LOW && killswitchActive){
+    killswitchActive = false;
+  }
+}
+
 void killSwitch() {
   // Zet alle ventielen uit
   for (int i = 0; i < 5; i++) {
-    digitalWrite(PIN_VALVE_1 + i, LOW);
+    digitalWrite(PIN_PUMP_VALVE + i, LOW);
   }
   // Zet de LED-strip uit
   strip.clear();
   strip.show();
   ledState = 0;
 }
+
