@@ -24,25 +24,25 @@ Wij ontwikkelen een geavanceerde eb- en vloedkar, die speciaal ontworpen is om o
 
 Om efficiënt om te gaan met waterbeheer, is er een apart reservoir geïntegreerd in het systeem, dat dient om het overtollige water dat uit de bakken vloeit op te vangen. Dit water wordt via een buizensysteem teruggeleid naar het reservoir, waarna het door een pomp opnieuw naar de planten kan worden getransporteerd. Dit zorgt voor een duurzaam en herbruikbaar irrigatiesysteem dat waterverbruik minimaliseert.
 
-De bediening van de kar is eenvoudig en gebruiksvriendelijk gemaakt door middel van vier knoppen. De eerste knop regelt de waterstroom naar de bakken, waarmee het water kan worden toegelaten of gestopt in de doos. De tweede knop is verantwoordelijk voor het in- en uitschakelen van de LED-verlichting boven de planten. De derde knop zorgt voor het afvoeren van het water uit de doos. De laatste knop is een "killswitch", deze zorgt ervoor dat alle automatische functionaliteiten uitgezet worden, zodat de kar kan verplaatst worden zonder problemen.
+De bediening van de kar is eenvoudig en gebruiksvriendelijk gemaakt door middel van vijf knoppen. De eerste knop regelt de waterstroom naar de bakken door het openen of sluiten van de waterventielen, waarmee het water kan worden toegelaten of gestopt in de doos. De tweede knop is verantwoordelijk voor het in- en uitschakelen van de LED-verlichting boven de planten. De derde knop zorgt voor het afvoeren van het water uit de doos. De vierde knop zorgt ervoor dat de waterpomp water zal pompen naar de waterventielen. De laatste knop is een "killswitch", deze zorgt ervoor dat alle automatische functionaliteiten uitgezet worden, zodat de kar kan verplaatst worden zonder problemen.
 
 Met deze combinatie van functionaliteit en eenvoud biedt de eb- en vloedkar een compleet systeem voor de verzorging van planten, dat zowel efficiënt als duurzaam is. Het stelt gebruikers in staat om op een gemakkelijke manier de watergift en verlichting te beheren, met de optie om het proces volledig te automatiseren indien gewenst. Het nadeel is wel dat je iets van technische kennis zal nodighebben om dit project te laten werken, en als je het project wil wisselen tussen standalone en deel van de serre.
 
-# Elektrionische hardware
-- ESP32 wroom 02
+# Elektronische hardware
+- ESP32 Wroom
 - 2 x Bodemsensor OT2019-D69
 - Waterpomp 12V Waterventiel
 - 5 x waterventiel 
 - 2 x LEDstrip 24V
-- Lichtsensor <vul type in als we het weten>
+- Lichtsensor 
 - 3 x drukknop
 - weerstanden
 - 2 x transistor
 - 6 x mosfet
 
-## esp32 wroom 
+## ESP32 Wroom 
 ### Beschrijving
-Voor dit project gebruiken we de esp32 wroom. Met behulp van deze microcontroller kunnen we de verschillende sensoren inlezen en met behulp van deze data de waterventielen en pompen aansturen. Daarnaast kan ale data later worden doorgestuurd naar het project GreenhouseNetwork-Monitoring om de data op die manier te kunnen monitoren.
+Voor dit project gebruiken we de ESP32 Wroom. Met behulp van deze microcontroller kunnen we de verschillende sensoren inlezen en met behulp van deze data de waterventielen en pompen aansturen. Daarnaast kan ale data later worden doorgestuurd naar het project GreenhouseNetwork-Monitoring om de data op die manier te kunnen monitoren.
 ### Pinout
 <img title="esp32-wroom pinout" src="/foto/esp32-pinout.png">
 
@@ -54,7 +54,7 @@ Om het water to aan de planten te krijgen, moet gebruik worden gemaakt van een p
 <img title="Whadda WPM421" src="/foto/esp32-pinout.png">
 
 ### Aansluiting
-Aangezien de esp niet genoeg stroom kan leveren om de pomp aan te sturen, moet er gebruik worden gemaakt van een mosfet. De mosfet die we hier voor gebruiken is de IRL540NPBF-ND. Met behulp van deze mosfet kunnen we de De 12 volt van de pomp schakelen met de 3.3 volt van de esp32.
+Aangezien de esp niet genoeg stroom kan leveren om de pomp aan te sturen, moet er gebruik worden gemaakt van een mosfet. De mosfet die we hier voor gebruiken is de IRL540NPBF-ND. Met behulp van deze mosfet kunnen we de De 12 volt van de pomp schakelen met de 3.3 volt van de ESP32.
 <img title="aansluiting pomp" src="/foto/esp32-pinout.png">
 
 ## Waterventiel
