@@ -52,4 +52,4 @@ void killSwitch();
 void updateValveCycle();
 void automaticProcess();
 void humidityData();
-void readAndSendHumidity();
+void testthingy();

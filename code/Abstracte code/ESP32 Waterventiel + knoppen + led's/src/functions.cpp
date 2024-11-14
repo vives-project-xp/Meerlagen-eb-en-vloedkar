@@ -72,11 +72,6 @@ void toggleLEDStrip() {
       ledState = 1;
       break;
     case 1:
-    // Set the LED strip to green
-      strip.fill(strip.Color(0, 255, 0), 0, strip.numPixels());
-      ledState = 2;
-      break;
-    case 2:
     // Clear the LED strip
       strip.clear();
       ledState = 0;
@@ -116,7 +111,7 @@ void updateValveCycle() {
   }
   if (valve3And4Active && millis() - valveTimer > valve90Seconds) {
     // Close the output lower valve and open the upper valve
-    digitalWrite(PIN_VALVE_OUTPUT_UPPER, HIGH); //Klopt dit??
+    digitalWrite(PIN_VALVE_OUTPUT_UPPER, LOW);
     digitalWrite(PIN_VALVE_OUTPUT_LOWER, LOW);
     valve3And4Active = false;
   }
@@ -132,12 +127,16 @@ void automaticProcess() {
   }
 }
 
-void readAndSendHumidity() {
+void humidityData() {
   int humidityValue = analogRead(PIN_HUMIDITYSENSOR);
   Serial.print("Humidity: ");
   Serial.println(humidityValue);
+}
 
-  // Set the LED strip to red for indication
-  strip.fill(strip.Color(255, 0, 0), 0, strip.numPixels());
-  strip.show();
+void testthingy(){
+  digitalWrite(PIN_VALVE_INPUT, HIGH);
+  Serial.println("Pump valve open");
+  delay(2000);
+  digitalWrite(PIN_VALVE_INPUT, LOW);
+  Serial.println("Pump valve closed");
 }
