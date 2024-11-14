@@ -38,7 +38,7 @@ void handleButtonPress(int button) {
       break;
     case 2:
     // Open the output valve for 10 seconds
-      void controlWaterPump(true, 10) {
+      void controlWaterPump(true, 10000) {
       openValveForDuration(PIN_VALVE_OUTPUT, valveDelay);
       break;
     case 3:
