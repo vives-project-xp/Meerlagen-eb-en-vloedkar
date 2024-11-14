@@ -38,6 +38,7 @@ void handleButtonPress(int button) {
       break;
     case 2:
     // Open the output valve for 10 seconds
+      void controlWaterPump(true, 10) {
       openValveForDuration(PIN_VALVE_OUTPUT, valveDelay);
       break;
     case 3:
@@ -133,8 +134,14 @@ void automaticProcess() {
 }
 
 // Control water pump state (on or off)
-void controlWaterPump(bool state) {
-    digitalWrite(PIN_PUMP, state ? HIGH : LOW);
+void controlWaterPump(bool state, unsigned long duration) {
+    if (state) {
+        digitalWrite(PIN_PUMP, HIGH);    // Turn on the pump
+        delay(duration);                 // Keep it on for the specified duration
+        digitalWrite(PIN_PUMP, LOW);     // Turn off the pump after the duration
+    } else {
+        digitalWrite(PIN_PUMP, LOW);     // Immediately turn off the pump if state is false
+    }
 }
 
 void readAndSendHumidity() {
