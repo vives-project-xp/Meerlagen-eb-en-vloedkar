@@ -38,6 +38,7 @@ void handleButtonPress(int button) {
       break;
     case 2:
     // Open the output valve for 10 seconds
+      controlWaterPump(true, 10000);
       openValveForDuration(PIN_VALVE_OUTPUT, valveDelay);
       break;
     case 3:
@@ -127,10 +128,20 @@ void automaticProcess() {
   }
 }
 
-void humidityData() {
+void humidityData(){
   int humidityValue = analogRead(PIN_HUMIDITYSENSOR);
   Serial.print("Humidity: ");
   Serial.println(humidityValue);
+  }
+// Control water pump state (on or off)
+void controlWaterPump(bool state, unsigned long duration) {
+    if (state) {
+        digitalWrite(PIN_PUMP, HIGH);    // Turn on the pump
+        delay(duration);                 // Keep it on for the specified duration
+        digitalWrite(PIN_PUMP, LOW);     // Turn off the pump after the duration
+    } else {
+        digitalWrite(PIN_PUMP, LOW);     // Immediately turn off the pump if state is false
+    }
 }
 
 void testthingy(){

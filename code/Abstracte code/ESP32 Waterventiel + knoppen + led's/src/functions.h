@@ -53,3 +53,5 @@ void updateValveCycle();
 void automaticProcess();
 void humidityData();
 void testthingy();
+void humidityData();
+void controlWaterPump(bool state, unsigned long duration); 
