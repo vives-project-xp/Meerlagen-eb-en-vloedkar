@@ -131,3 +131,13 @@ void automaticProcess() {
     handleButtonPress(4);
   }
 }
+
+void readAndSendHumidity() {
+  int humidityValue = analogRead(PIN_HUMIDITYSENSOR);
+  Serial.print("Humidity: ");
+  Serial.println(humidityValue);
+
+  // Set the LED strip to red for indication
+  strip.fill(strip.Color(255, 0, 0), 0, strip.numPixels());
+  strip.show();
+}

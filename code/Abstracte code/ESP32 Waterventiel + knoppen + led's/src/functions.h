@@ -6,21 +6,27 @@
 #include <TimeAlarms.h>
 
 //define buttons
-#define PIN_INPUT_WATERPUMP 13
-#define PIN_OUTPUT_WATER 12
-#define PIN_INPUT_WATERVALVE 14
-#define PIN_LED 27
-#define PIN_KILLSWITCH 26
+#define PIN_INPUT_WATERPUMP 34
+#define PIN_OUTPUT_WATER 32
+#define PIN_INPUT_WATERVALVE 35
+#define PIN_LED 33
+#define PIN_KILLSWITCH 39
 
 //define LED strip
-#define PIN_LEDSTRIP 25 
+#define PIN_LEDSTRIP 23 
 
 //define valves
-#define PIN_PUMP_VALVE 33
-#define PIN_VALVE_INPUT 32
-#define PIN_VALVE_OUTPUT_UPPER 23
-#define PIN_VALVE_OUTPUT_LOWER 22
-#define PIN_VALVE_OUTPUT 21
+#define PIN_PUMP_VALVE 2
+#define PIN_VALVE_INPUT 15
+#define PIN_VALVE_OUTPUT_UPPER 8
+#define PIN_VALVE_OUTPUT_LOWER 7
+#define PIN_VALVE_OUTPUT 6
+
+//define pump
+#define PIN_PUMP 0
+
+//define humiditysensor
+#define PIN_HUMIDITYSENSOR 36
 
 // Define variables
 extern Adafruit_NeoPixel strip;
@@ -45,3 +51,5 @@ void checkKillSwitch();
 void killSwitch();
 void updateValveCycle();
 void automaticProcess();
+void humidityData();
+void readAndSendHumidity();
