@@ -53,3 +53,5 @@ void updateValveCycle();
 void automaticProcess();
 void humidityData();
 void readAndSendHumidity();
+
+void controlWaterPump(bool state); // New function prototype for controlling the water pump

@@ -132,6 +132,11 @@ void automaticProcess() {
   }
 }
 
+// Control water pump state (on or off)
+void controlWaterPump(bool state) {
+    digitalWrite(PIN_PUMP, state ? HIGH : LOW);
+}
+
 void readAndSendHumidity() {
   int humidityValue = analogRead(PIN_HUMIDITYSENSOR);
   Serial.print("Humidity: ");
