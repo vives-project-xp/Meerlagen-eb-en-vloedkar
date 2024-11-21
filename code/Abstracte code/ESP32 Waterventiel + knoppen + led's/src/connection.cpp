@@ -1,6 +1,6 @@
 #include "connection.h"
 #include <vector>
-#include <ArduinoJson.h>
+// #include <ArduinoJson.h>
 
 HaConnection::HaConnection(): HaConnection("undefined", "undefined", 80, false) {};
 HaConnection::HaConnection(String ssid, String password): HaConnection(ssid, password, 80, false) {};

@@ -4,6 +4,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <TimeLib.h>
 #include <TimeAlarms.h>
+#include "sensor.h"
 
 //define buttons
 #define PIN_INPUT_WATERPUMP 34
@@ -13,20 +14,21 @@
 #define PIN_KILLSWITCH 39
 
 //define LED strip
-#define PIN_LEDSTRIP 23 
+#define PIN_LEDSTRIP 22 
 
 //define valves
 #define PIN_PUMP_VALVE 2
-#define PIN_VALVE_INPUT 15
-#define PIN_VALVE_OUTPUT_UPPER 8
-#define PIN_VALVE_OUTPUT_LOWER 7
-#define PIN_VALVE_OUTPUT 6
+#define PIN_VALVE_INPUT 0
+#define PIN_VALVE_OUTPUT_UPPER 4
+#define PIN_VALVE_OUTPUT_LOWER 16
+#define PIN_VALVE_OUTPUT 17
 
 //define pump
-#define PIN_PUMP 0
+#define PIN_PUMP 15
 
 //define humiditysensor
-#define PIN_HUMIDITYSENSOR 36
+#define PIN_HUMIDITYSENSOR_UPPER 36 
+#define PIN_HUMIDITYSENSOR_LOWER  
 
 // Define variables
 extern Adafruit_NeoPixel strip;
@@ -41,6 +43,8 @@ extern int buttonState[5];
 extern int lastButtonState[5];
 extern int ledState;
 extern bool killswitchActive;
+extern HaSensor humSensorUpper;
+extern HaSensor humSensorLower;
 
 // Function prototypes
 void setupPins();
@@ -54,4 +58,8 @@ void automaticProcess();
 void humidityData();
 void testthingy();
 void humidityData();
-void controlWaterPump(bool state, unsigned long duration); 
+void controlWaterPump(bool state, unsigned long duration);
+void testLed(); 
+void fullTest();
+void logStatus(int button);
+void updateButtonStates();

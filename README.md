@@ -74,6 +74,14 @@ Aangezien de esp niet genoeg stroom kan leveren om de pomp aan te sturen, moet e
 
 <img title="aansluiting pomp" src="/foto/esp32-pinout.png">
 
+Om dit allemaal te testen, hebben we een elektrisch schema opgebouwd via het online programma EasyEDA.
+
+<img title="elektrisch schema" src="/Afbeeldingen/elektrisch_schema.jpg"
+
+Dit hebben we eerst geprobeerd op een breadboard.
+
+<img title="breadboard" src="/Afbeeldingen/schema.jpg"
+
 ### Waterventiel
 
 #### Beschrijving
