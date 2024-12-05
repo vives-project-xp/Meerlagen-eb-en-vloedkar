@@ -2,10 +2,10 @@
 
 ## Over
 
-Dit is het project Meerlagen eb- en vloedkar. Dit project is deel van het vak Project Experience van [VIVES](https://www.vives.be/en).
+Dit is het project meerlagen eb- en vloedkar. Dit project is deel van het vak Project Experience van [VIVES](https://www.vives.be/en).
 Het doel van dit project is een proof of concept maken van een automatisch watersysteem om planten te laten groeien op een kar.
 
-# Inhoud
+## Inhoud
 
 - [Probleemstelling](#probleemstelling)
 - [Opdracht](#opdracht)
@@ -50,82 +50,118 @@ Met deze combinatie van functionaliteit en eenvoud biedt de eb- en vloedkar een 
 
 #### Beschrijving
 
-Voor dit project gebruiken we de ESP32 Wroom. Met behulp van deze microcontroller kunnen we de verschillende sensoren inlezen en met behulp van deze data de waterventielen en pompen aansturen. Daarnaast kan ale data later worden doorgestuurd naar het project GreenhouseNetwork-Monitoring om de data op die manier te kunnen monitoren.
+Voor dit project gebruiken we de ESP32 Wroom. Met behulp van deze microcontroller kunnen we de verschillende sensoren inlezen en weergeven. Deze data kan doorgestuurd worden naar het project GreenhouseNetwork-Monitoring om de data op die manier te kunnen monitoren. Daarnaast kunnen we met behulp van deze data de waterventielen, LED's, knoppen en pomp aansturen. Hieronder kan je de pinout van de ESP32 Wroom bekijken.
 
 #### Pinout
 
-<img title="esp32-wroom pinout" src="/foto/esp32-pinout.png">
+![Pinout](/Afbeeldingen/esp32-pinout.png)
 
 ### Bodemsensor OT2019-D69
 
-We gebruiken de bodemsensor OT2019-D69 om de vochtigheid van de aarde in de bakken te meten. Deze data wordt via Home Assistant doorgezonden. Met deze data kan je zien hoe vochtig het is op dat moment in de bakken. Zo kan je weten als je op een warmere dag extra water moet toevoegen.
+We gebruiken de bodemsensor OT2019-D69 om de vochtigheid van de aarde in de bakken te meten. We beschikken over twee sensoren, één voor elke bak. Deze data wordt in de code omgevormd naar een percentage en doorgezonden naar de dashboard van de Home Assistant groep. Hoe hoger het percentage, hoe vochtiger het is in de bak. Met deze data kan je zien hoe vochtig het is op dat moment in de bakken, zo kan je weten als je op een warmere dag extra water moet toevoegen.
+
+![Sensor](/Afbeeldingen/sensor.jpg)
 
 ### Waterpomp
 
 #### Beschrijving
 
-Om het water to aan de planten te krijgen, moet gebruik worden gemaakt van een pomp. Deze pomp moet in staat zijn het water vanuit het reservoir naar de bovenkant bevenkant van de kast te pompen. Hiervoor gebruiken we de Whadda WPM421 waterpomp. Deze pomp werkt op 12 vold en kan tot 240 liter per uur , 3 meter de lucht in te pompen.
+Om het water tot aan de planten te krijgen, maken we gebruik van een waterpomp. Deze pomp moet in staat zijn het water vanuit het reservoir naar de bovenkant van de kast te pompen. Hiervoor gebruiken we de Whadda WPM421 waterpomp. Deze pomp werkt op 12 volt en kan tot 240 liter per uur, 3 meter de lucht in te pompen. Ideaal aan deze pomp is dat hij waterdicht is, want de pomp zal in het waterreservoir zitten. Deze pomp heeft ook een diameter van 8mm, wat ideaal is aangezien onze waterbuizen een binnendiameter hebben van 8mm.
 
-<img title="Whadda WPM421" src="/foto/esp32-pinout.png">
+![Pomp](/Afbeeldingen/pomp.jpg)
 
 #### Aansluiting
 
-Aangezien de esp niet genoeg stroom kan leveren om de pomp aan te sturen, moet er gebruik worden gemaakt van een mosfet. De mosfet die we hier voor gebruiken is de IRL540NPBF-ND. Met behulp van deze mosfet kunnen we de De 12 volt van de pomp schakelen met de 3.3 volt van de ESP32.
+Aangezien de esp niet genoeg stroom kan leveren om de pomp aan te sturen, maken we gebruik van een MOSFET. De MOSFET die we hiervoor gebruiken is de IRL540NPBF-ND. Met behulp van deze MOSFET kunnen we de 12 volt van de pomp schakelen met de 3.3 volt van de ESP32.
 
-<img title="aansluiting pomp" src="/foto/esp32-pinout.png">
+![MOSFET](/Afbeeldingen/mosfet.jpg)
 
-Om dit allemaal te testen, hebben we een elektrisch schema opgebouwd via het online programma EasyEDA.
+Om dit allemaal te testen, hebben we een elektrisch schema opgebouwd via het online programma EasyEDA. Dit schema toont alles dat we gebruiken van elektronische componenten, en op welke pins ze geconnecteerd zijn.
 
-<img title="elektrisch schema" src="/Afbeeldingen/elektrisch_schema.jpg"
+![Elektrisch schema](/Afbeeldingen/Schema.png)
 
-Dit hebben we eerst geprobeerd op een breadboard.
+Deze elektronische connectie hebben we eerst geprobeerd uit te bouwen op een breadboard. Dit hebben we gedaan zodat we alles van code kunnen testen, en om eventuele fouten uit het schema te halen.
 
-<img title="breadboard" src="/Afbeeldingen/schema.jpg"
+![Breadboard](/Afbeeldingen/breadboard.jpg)
 
 ### Waterventiel
 
 #### Beschrijving
 
-Om het  project volledig automatisch te kunnen laten werken, zijn er 5 waterventielen nodig. Deze ventielen zorgen ervoor dat het water naar de juiste plekken wordt geleid. De ventielen die we hiervoor gebruiken zijn de Water Valve-8mm-12VDC.
+Om het  project volledig automatisch te kunnen laten werken, maken we gebruik van vijf waterventielen. Deze ventielen zorgen ervoor dat het water naar de juiste plekken wordt geleid. De ventielen die we hiervoor gebruiken zijn de Water Valve-8mm-12VDC. Deze ventielen hebben ook een diameter van 8mm, wat zoals eerder vermeld ook de diameter is van de binnenkant van onze buizen.
 
-Er zijn een aantal reden waarom we waterventielen gebruiken.
+![Ventiel](/Afbeeldingen/ventiel.jpg)
+
+Er zijn een aantal reden waarom we waterventielen gebruiken:
 
 - #### Toevoer water reservoir
 
-Wanneer het reservoir leeg is, is het de bedoeling dat er water wordt toegevoerd. Dir kan gebeuren door een waterventiel open te zetten van het reservoire van het project GreenhouseWateringSystem naar het reservoire ven onze kast.
-
-- #### Afvoer water reservoir
-
-Wanneer het water te vuil wordt of wanneer de voedingstoffen uit het water zijn verdwenen, moet water uit het reservoir worden afgevoerd. Dit kan de door een ventiel onderaan het reservoir open te zetten met een afvoer naar buiten.
-
-- #### Afvoer water plantenbakken
-
-Om het water uit de planetenbakken te legen, maken ook hier gebruik van een waterventiel. elk niveau  van de kast krijgen een eigen ventiel om op die manier volledige controle te krijgen over het waterpeil in de bakken.
+Wanneer het reservoir leeg is, moet er water toegevoerd worden. Dit gebeurt door het waterventiel die de connectie van het waterreservoire van het project GreenhouseWateringSystem naar het waterreservoir van onze kast open te zetten.
 
 - #### Toevoer water 1ste plantenbak
 
-Voor het omhoog pomppen van water gebruiken we 1 pompen. De leiding naar de verschillende bakken wordt gesplitst om elke bak te kunnen berijken. Om te voorkomen dat het water altijd naar het eerste niveau gaat, gebruiken we een waterventiel om de toevoer van water op het eerste niveau te belemmern.
+Voor het omhoog pompen van het water uit het reservoir naar de bakken gebruiken we een waterpomp. De leiding naar de verschillende bakken wordt gesplitst met een T-stuk van 8mm om elke bak te kunnen bereiken. Om te voorkomen dat het water altijd naar het eerste niveau gaat, gebruiken we een waterventiel om de toevoer van water op het eerste niveau te belemmeren. Eerst krijgt de bak op het eerste niveau water, dan sluit de ventiel zodat het water naar de bak op het tweede niveau kan stromen. 
+
+- #### Afvoer water plantenbakken
+
+Om het water uit de plantenbakken te legen, maken we ook hier gebruik van een waterventiel. Elk niveau van de kast krijgt een eigen ventiel om op die manier volledige controle te krijgen over het waterpeil in de bakken. Als er teveel water zit, worden de waterventielen geopend en stroomt het water uit de bakken weg naar het waterreservoir.
+
+- #### Afvoer water reservoir
+
+Wanneer het water te vuil wordt of wanneer de voedingstoffen uit het water zijn verdwenen, moet het water uit het reservoir worden afgevoerd. Dit gebeurt door een ventiel onderaan het reservoir open te zetten met een afvoer naar buiten.
 
 ### Aansluiting
 
-Ook voor de waterventielen is de 3.3 volt die de esp kan geven niet genoeg. Daarom maken we ook hiervoor een gebruik van een mosfet. Dit is voor het gemak opnieuw de IRL540NPBF-ND. De werking  in deze situatie is gelijk aan de pomp.
-<img title="waterventiel pomp" src="/foto/esp32-pinout.png">
+Ook voor de waterventielen is de 3.3 volt die de ESP32 kan geven niet genoeg. Daarom maken we ook hiervoor gebruik van vijf MOSFETs, één MOSFET per ventiel. Dit is dezelfde als voor de waterpomp, namelijk de IRL540NPBF-ND.
 
 ### LEDstrip 5V
+
+Op elk niveau met een bak zijn er twee LEDstrips bevestigd. In het begin van dit project hebben we met een expert van plantengroei in VIVES Roeselaere gepraat. Deze expert heeft meegegeven dat het ideaal is dat de planten bestraalt worden met extra LED verlichting naast zonlicht. Met zijn advies hebben we geïnvesteerd in een SK6812 RGBW LEDstrip van 5 volt. Van deze expert kregen we ook mee wat de ideale LED configuratie is om de plantengroei te stimuleren. Dit was namelijk R:100, G:30, B:25. Hieronder kan je zien hoe dit eruit ziet.
+
+![LEDs](/Afbeeldingen/leds.jpg)
+
+### Knoppen
+
+Aan onze kar hebben we onze "black box". In deze box steken we de ESP32 en andere elektronische componenten zodat dit beschermt is tegen het water en zodat er geen onbevoegde mensen aankomen. Aan het deksel van de blackbox zitten zes knoppen bevestigd. Deze knoppen zorgen ervoor dat je een functie onmiddellijk kan uitvoeren, want deze kar moet automatisch werken, maar ook op aanvraag. Hieronder kan je de knoppen zien.
+
+![LEDs](/Afbeeldingen/knoppen.png)
+
+Elke knop heeft zijn eigen functie:
+
+Dit is een korte uitleg wat elke knop doet:
+
+- #### Water toevoer
+
+Als je op deze knop drukt, opent de ventiel van het waterreservoir van het team GreenhouseWateringSystem naar ons reservoir.
+
+- #### Pomp
+
+Door het drukken op deze knop, laat je de pomp werken. Hiermee wordt de ventiel op het eerste niveau ook geopend, zodat het water in de eerste bak kan vloeien. Na enige tijd zal deze ventiel sluiten zodat het water ook naar de tweede bak kan vloeien.
+
+- #### Bak legen
+
+Met deze knop laten we het water van de bakken terug naar het waterreservoir vloeien. Hiermee openen beide ventielen die aan de kant van het wegvloeien staan, zodat het "vuil" water terug in het waterreservoir kan vloeien.
+
+- #### Water Afvoer
+
+Via deze knop laat je het vuil water uit de 
 
 ### Lichtsensor UPRtek PAR200
 
 De lichtsensor mochten we gebruiken van VIVES Roeselaere. Met deze sensor kunnen we heel wat info over het licht krijgen. Hiermee kunnen we ondermeer de CCT (Correlated Color Temperature), LUX (Verlichting) en de PPFD (Photosynthetic Photon Flux Density) meten. Dit is interessant om zo de LED's te meten, zodat we ervoor kunnen zorgen dat de uitstraling van de LED's correleert met de groei van de planten.
 
+![Licht](/Afbeeldingen/licht.png)
+
 # Software
 
-Voor dit project zullen we werken met Platform IO. Dit gebruiken we zodat we de library Adafruit Neopixel kunnen gebruiken om de LED's aan te sturen.
+Voor dit project werken we met Platform IO. Dit gebruiken we zodat we de library Adafruit Neopixel kunnen gebruiken om de LED's aan te sturen.
+
 
 # Bouw van de kast
 
 - Kast 173x90x40cm
 - Flexibele buizen 10Mx16mm
-- 2 x Doos 31L
+- 3 x Doos 31L
 
 ## Het Team
 

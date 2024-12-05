@@ -62,9 +62,11 @@ void humidityData()
   int humidityValueUpper = analogRead(PIN_HUMIDITYSENSOR_UPPER);
   int humidityValueLower = analogRead(PIN_HUMIDITYSENSOR_LOWER);
   Serial.print("Humidity upper: ");
+  Serial.println(humidityValueUpper);
   humidityValueUpper = humidityValueConverter(humidityValueUpper);
   Serial.println(humidityValueUpper);
   Serial.print("Humidity lower: ");
+  Serial.println(humidityValueLower);
   humidityValueLower = humidityValueConverter(humidityValueLower);
   Serial.println(humidityValueLower);
   delay(10000);
@@ -213,33 +215,33 @@ void setup()
 
   setTime(8,0,0,1,11,2024);
 
-  Alarm.alarmRepeat(8, 0, 0, automaticProcess);
-  Alarm.alarmRepeat(20, 0, 0, automaticProcess);  
+  // Alarm.alarmRepeat(8, 0, 0, automaticProcess);
+  // Alarm.alarmRepeat(20, 0, 0, automaticProcess);  
   setupPins();
 }
 // TESTEN
 
 void loop()
 {
-  checkKillSwitch();
-  if(!killswitchActive){
-    Alarm.delay(0);
-    for (int i = 0; i < 6; i++) {
-      int reading = digitalRead(buttonPins[i]);
-      if (reading != lastButtonState[i]) {
-      previousMillis[i] = millis();
-    }
-    if ((millis() - previousMillis[i]) > debounceDelay) {
-      if (reading != buttonState[i]) {
-        buttonState[i] = reading;
-        if (buttonState[i] == LOW) {
-          handleButtonPress(i + 1);
-        }
-      }
-    }
-    lastButtonState[i] = reading;
-  }
-    }
+  // checkKillSwitch();
+  // if(!killswitchActive){
+  //   Alarm.delay(0);
+  //   for (int i = 0; i < 6; i++) {
+  //     int reading = digitalRead(buttonPins[i]);
+  //     if (reading != lastButtonState[i]) {
+  //     previousMillis[i] = millis();
+  //   }
+  //   if ((millis() - previousMillis[i]) > debounceDelay) {
+  //     if (reading != buttonState[i]) {
+  //       buttonState[i] = reading;
+  //       if (buttonState[i] == LOW) {
+  //         handleButtonPress(i + 1);
+  //       }
+  //     }
+  //   }
+  //   lastButtonState[i] = reading;
+  // }
+  //   }
   humidityData();
 }
 
@@ -258,3 +260,56 @@ void loop()
 // //   digitalWrite(PIN_PUMP_VALVE, LOW);
 // //   delay(1000);
 // // }
+
+
+// works for LED
+
+#include <Arduino.h>
+#include <Adafruit_NeoPixel.h>
+#include "functions.h"
+
+// Define variables
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN_LEDSTRIP, NEO_GRB + NEO_KHZ800);
+
+// DONT TOUCH CODE BELOW
+void ledsToColor()
+{
+  digitalWrite(PIN_LEDSTRIP, HIGH);
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    if (i % 4 == 0)
+    {
+      strip.setPixelColor(i, strip.Color(100, 30, 25));
+      strip.show();
+    }
+    else if (i % 4 == 1)
+    {
+      strip.setPixelColor(i, strip.Color(30, 25, 100));
+      strip.show();
+    }
+    else if (i % 4 == 3)
+    {
+      strip.setPixelColor(i, strip.Color(25, 100, 30));
+      strip.show();
+    }
+    else
+    {
+      strip.setPixelColor(i, strip.Color(100, 30, 25));
+      strip.show();
+    }
+  }
+}
+
+void setup()
+{
+  Serial.begin(115200);
+  Serial.println("Starting setup...");
+
+  ledsToColor();
+}
+// TESTEN
+
+void loop()
+{
+ delay(0);
+}
