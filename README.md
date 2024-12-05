@@ -170,6 +170,7 @@ Voor dit project werken we met Platform IO. Dit gebruiken we zodat we de library
 - Kast 173x90x40cm
 - Flexibele buizen 10Mx16mm
 - 3 x Doos 31L
+- 1 x Doos 30L
 
 ## Het Team
 
