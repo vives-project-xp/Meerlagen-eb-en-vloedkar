@@ -172,6 +172,18 @@ Als je code wilt aanpassen of nog eens wil herstarten, kan je [hier](../Project%
 
 ![Eindproduct](/Afbeeldingen/eindproduct.jpg)
 
+# Uitbreidingen
+
+Mogelijke uitbreidingen:
+
+- Een lagensysteem van drie lagen gebruiken. Hierbij zou je extra buizen, een nieuwe doos, ventiel en sensor moeten voorzien en de code moet aangepast worden.
+
+- Een systeem dat ervoor zorgt dat de bakken apart werken. Hiermee zou het mogelijk zijn om planten die meer of minder water nodig hebben te combineren met andere, zonder dat er interferentie van beide zou komen.
+
+- Een filtratiesysteem, om het vuiligheid in het water niet laten gepompt worden naar de dozen.
+
+- Automatische vochtigheiddetectie, zodat er automatisch water wordt toegevoegd als het waterniveau begint te zakken.
+
 ## Het Team
 
 - [Alberiek Depreytere](https://github.com/AlberiekDepreytere) SCRUMmaster
