@@ -2,8 +2,8 @@
 
 ## Over
 
-Dit is het project meerlagen eb- en vloedkar. Dit project is deel van het vak Project Experience van [VIVES](https://www.vives.be/en).
-Het doel van dit project is een proof of concept maken van een automatisch watersysteem om planten te laten groeien op een kar.
+Dit is het project meerlagen eb- en vloedkar. Dit project maakt deel van het vak Project Experience van [VIVES](https://www.vives.be/en).
+Het doel van dit project is een proof of concept maken van een automatisch watersysteem om planten te laten groeien op een meerlagenkar.
 
 ## Inhoud
 
@@ -16,7 +16,7 @@ Het doel van dit project is een proof of concept maken van een automatisch water
 
 ## Probleemstelling
 
-Bij VIVES wordt een nieuwe serre geïnstalleerd, die niet alleen een functionele maar ook een inspirerende ruimte zal vormen voor zowel medewerkers als bezoekers. Deze serre zal een centrale rol spelen in diverse projecten die gekoppeld zijn aan het vak 'Project Experience', waarbij studenten van de opleiding "Elektronica-ICT" ervaring opdoen met innovatieve toepassingen. Een van de kernopdrachten binnen deze setting is het ontwikkelen van een automatisch irrigatiesysteem voor de planten in de serre. Het doel van dit systeem is om planten te voorzien van water zonder menselijke tussenkomst, maar er moet tegelijkertijd ook een mogelijkheid bestaan om het water handmatig te regelen wanneer dat nodig is.
+Bij VIVES is nieuwe serre geïnstalleerd, die niet alleen een functionele maar ook een inspirerende ruimte zal vormen voor zowel medewerkers als bezoekers. Deze serre zal een centrale rol spelen in diverse projecten die gekoppeld zijn aan het vak 'Project Experience', waarbij studenten van de opleiding "Elektronica-ICT" ervaring opdoen met innovatieve toepassingen. Een van de kernopdrachten binnen deze setting is het ontwikkelen van een automatisch irrigatiesysteem voor de planten in de serre. Het doel van dit systeem is om planten te voorzien van water zonder menselijke tussenkomst, maar er moet tegelijkertijd ook een mogelijkheid bestaan om het water handmatig te regelen wanneer dat nodig is.
 
 Het systeem moet worden ontworpen als een meerlagensysteem, zodat op de meerdere lagen planten op efficiënte wijze gelijktijdig bewaterd kunnen worden. Daarnaast wordt er verwacht dat de kar die in dit irrigatiesysteem wordt geïntegreerd, een eb- en vloedfunctie heeft. Dit betekent dat het overtollige water na het bewateren van de planten gemakkelijk moet kunnen weglopen uit de bak waarin de planten zich bevinden, om waterophoping te voorkomen en de gezondheid van de planten te bevorderen.
 
@@ -30,9 +30,9 @@ Wij ontwikkelen een geavanceerde eb- en vloedkar, die speciaal ontworpen is om o
 
 Om efficiënt om te gaan met waterbeheer, is er een apart reservoir geïntegreerd in het systeem, dat dient om het overtollige water dat uit de bakken vloeit op te vangen. Dit water wordt via een buizensysteem teruggeleid naar het reservoir, waarna het door een pomp opnieuw naar de planten kan worden getransporteerd. Dit zorgt voor een duurzaam en herbruikbaar irrigatiesysteem dat waterverbruik minimaliseert.
 
-De bediening van de kar is eenvoudig en gebruiksvriendelijk gemaakt door middel van vijf knoppen. De eerste knop regelt de waterstroom naar de bakken door het openen of sluiten van de waterventielen, waarmee het water kan worden toegelaten of gestopt in de doos. De tweede knop is verantwoordelijk voor het in- en uitschakelen van de LED-verlichting boven de planten. De derde knop zorgt voor het afvoeren van het water uit de doos. De vierde knop zorgt ervoor dat de waterpomp water zal pompen naar de waterventielen. De laatste knop is een "killswitch", deze zorgt ervoor dat alle automatische functionaliteiten uitgezet worden, zodat de kar kan verplaatst worden zonder problemen.
+De bediening van de kar is eenvoudig en gebruiksvriendelijk gemaakt door middel van zes knoppen. De eerste knop opent het ventiel van het GreenhouseWateringSystem naar ons reservoir. De tweede knop is activeert de pomp en opent het eerste niveau ventiel, zodat water naar de eerste bak kan vloeien en daarna naar de tweede bak. De derde knop laat het water terugstromen naar het reservoir door het openen van beide ventielen. De vierde knop zorgt ervoor dat het vuil water uit het reservoir gaat vloeien. De vijfde knop schakelt de LEDs aan of uit.De laatste knop is een "killswitch", deze zorgt ervoor dat alle automatische functionaliteiten uitgezet worden, zodat de kar kan verplaatst worden zonder problemen.
 
-Met deze combinatie van functionaliteit en eenvoud biedt de eb- en vloedkar een compleet systeem voor de verzorging van planten, dat zowel efficiënt als duurzaam is. Het stelt gebruikers in staat om op een gemakkelijke manier de watergift en verlichting te beheren, met de optie om het proces volledig te automatiseren indien gewenst. Het nadeel is wel dat je iets van technische kennis zal nodighebben om dit project te laten werken, en als je het project wil wisselen tussen standalone en deel van de serre.
+Met deze combinatie van functionaliteit en eenvoud biedt de eb- en vloedkar een compleet systeem voor de verzorging van planten, dat zowel efficiënt als duurzaam is. Het stelt gebruikers in staat om op een gemakkelijke manier de watergift en verlichting te beheren, met de optie om het proces volledig te automatiseren indien gewenst. Het nadeel is wel dat je iets van technische kennis zal nodig hebben om dit project te laten werken, en als je het project wil wisselen tussen standalone en deel van de serre.
 
 ## Elektronische hardware
 
@@ -41,7 +41,7 @@ Met deze combinatie van functionaliteit en eenvoud biedt de eb- en vloedkar een 
 - Waterpomp 12V
 - 5 x waterventiel
 - 2 x LEDstrip 5V
-- 5 x schakelaars
+- 6 x schakelaars
 - Meerdere weerstanden van verschillende waardes
 - 2 x transistor BC547B
 - 6 x mosfet IRL540NPBF
@@ -128,8 +128,6 @@ Aan onze kar hebben we onze "black box". In deze box steken we de ESP32 en ander
 
 Elke knop heeft zijn eigen functie:
 
-Dit is een korte uitleg wat elke knop doet:
-
 - #### Water toevoer
 
 Als je op deze knop drukt, opent de ventiel van het waterreservoir van het team GreenhouseWateringSystem naar ons reservoir.
@@ -162,14 +160,15 @@ De lichtsensor mochten we gebruiken van VIVES Roeselaere. Met deze sensor kunnen
 
 # Software
 
-Voor dit project werken we met Platform IO. Dit gebruiken we zodat we de library Adafruit Neopixel kunnen gebruiken om de LED's aan te sturen.
+Voor dit project werken we met Platform IO. Dit gebruiken we zodat we de library Adafruit Neopixel kunnen gebruiken om de LED's aan te sturen. Verder werken we ook met Alarm() om het automatisch proces te laten werken, en verder hebben we een apart bestand waar alles van functie definities en pin definities staan. We hebben ook een integratie met Home Assistant. Hiervoor hebben we de nodige libraries gebruikt, onze twee sensoren via hun gedefinieerd en de data van de sensoren laten doorzenden.
 
+# Handleiding
 
-# Bouw van de kast
+Als je code wilt aanpassen of nog eens wil herstarten, kan je [hier](../Project%20management/handleiding.md) een handleiding van de code vinden.
 
-- Kast 173x90x40cm
-- Flexibele buizen 10Mx16mm
-- 3 x Doos 31L
+# Eindproduct
+
+![Eindproduct](/Afbeeldingen/eindproduct.jpg)
 
 ## Het Team
 
