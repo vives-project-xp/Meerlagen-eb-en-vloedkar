@@ -60,7 +60,7 @@ void ledsToColor()
 void humidityData()
 {
   int humidityValueUpper = analogRead(PIN_HUMIDITYSENSOR_UPPER);
-  int humidityValueLower = analogRead(PIN_HUMIDITYSENSOR_LOWER);
+  int humidityValueLower = analogRead(PIN_HUMIDITYSENSOR_UPPER);
   Serial.print("Humidity upper: ");
   Serial.println(humidityValueUpper);
   humidityValueUpper = humidityValueConverter(humidityValueUpper);
@@ -262,54 +262,3 @@ void loop()
 // // }
 
 
-// works for LED
-
-#include <Arduino.h>
-#include <Adafruit_NeoPixel.h>
-#include "functions.h"
-
-// Define variables
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN_LEDSTRIP, NEO_GRB + NEO_KHZ800);
-
-// DONT TOUCH CODE BELOW
-void ledsToColor()
-{
-  digitalWrite(PIN_LEDSTRIP, HIGH);
-  for (int i = 0; i < NUM_LEDS; i++)
-  {
-    if (i % 4 == 0)
-    {
-      strip.setPixelColor(i, strip.Color(100, 30, 25));
-      strip.show();
-    }
-    else if (i % 4 == 1)
-    {
-      strip.setPixelColor(i, strip.Color(30, 25, 100));
-      strip.show();
-    }
-    else if (i % 4 == 3)
-    {
-      strip.setPixelColor(i, strip.Color(25, 100, 30));
-      strip.show();
-    }
-    else
-    {
-      strip.setPixelColor(i, strip.Color(100, 30, 25));
-      strip.show();
-    }
-  }
-}
-
-void setup()
-{
-  Serial.begin(115200);
-  Serial.println("Starting setup...");
-
-  ledsToColor();
-}
-// TESTEN
-
-void loop()
-{
- delay(0);
-}
