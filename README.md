@@ -144,7 +144,15 @@ Met deze knop laten we het water van de bakken terug naar het waterreservoir vlo
 
 - #### Water Afvoer
 
-Via deze knop laat je het vuil water uit de 
+Via deze knop laat je het vuil water uit het waterreservoir vloeien.
+
+- #### Leds
+
+Deze knop laat de LEDs aan of uit gaan.
+
+- #### Off
+
+De laatste, maar wel belangrijkste knop is de off-knop, oftewel de killswitch. Deze knop zorgt ervoor dat alle functionaliteit van de kar uit staat. Hiermee zet je ook de andere knoppen uit. Deze knop is belangrijk, want de kar is bedoeld voor de serre, maar moet ook apart kunnen staan. Als alle functionaliteit uit staat, kan je zonder zorgen de kast verplaatsen of bewerkingen maken, zonder te prutsen aan de ESP.
 
 ### Lichtsensor UPRtek PAR200
 
