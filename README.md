@@ -12,6 +12,8 @@ Het doel van dit project is een proof of concept maken van een automatisch water
 - [Hardware](#hardware)
 - [Elektronische hardware](#elektronische-hardware)
 - [Software](#software)
+- [Handleiding](#handleiding)
+- [Eindproduct](#eindproduct)
 - [Het Team](#het-team)
 
 ## Probleemstelling
