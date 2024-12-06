@@ -166,7 +166,7 @@ Voor dit project werken we met Platform IO. Dit gebruiken we zodat we de library
 
 # Handleiding
 
-Als je code wilt aanpassen of nog eens wil herstarten, kan je [hier](../Project%20management/handleiding.md) een handleiding van de code vinden.
+Als je code wilt aanpassen of nog eens wil herstarten, kan je [hier](/Project%20management/handleiding.md) een handleiding van de code vinden.
 
 # Eindproduct
 

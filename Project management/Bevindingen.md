@@ -2,8 +2,8 @@
 
 ## Inleiding
 
-Omdat het project iets nieuws is voor ons met een steile learningcurves, hebben we veel moeilijkheden ondervonden
-In deze document gaan we alle bevindingen opsommen en dingen waarop men zou moeten opletten voor de volgende keer.
+Omdat het project iets nieuws is voor ons met een steile learningcurve, hebben we veel moeilijkheden ondervonden.
+In dit document gaan we alle bevindingen opsommen en dingen waarop men zou moeten opletten voor de volgende keer.
 
 ### Buizen
 
@@ -15,4 +15,9 @@ In deze document gaan we alle bevindingen opsommen en dingen waarop men zou moet
   op te voelen.
 - Voor afvoer van de bakken, zou het beter zijn om de gaatjes onder de bak te boren.
 
+### Sensor
+
+- De sensor zou ideaal vanonder de bak geplaatst worden, in plaats van boven.
+
 # UNDER CONSTRUCTION
+
