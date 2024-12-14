@@ -5,6 +5,7 @@
 #include "functions.h"
 #include "connection.h"
 #include "sensor.h"
+#include "config.h"
 
 // Define variables
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN_LEDSTRIP, NEO_GRB + NEO_KHZ800);
@@ -27,6 +28,8 @@ const int buttonPins[6] = {PIN_INPUT_WATERTANK, PIN_INPUT_WATERPUMP, PIN_OUTPUT_
 extern HaSensor humSensorUpper("Vochtigheid boven: ", SensorType::HUMIDITY);
 extern HaSensor humSensorLower("Vochtigheid beneden: ", SensorType::HUMIDITY);
 
+HaConnection connection;
+
 // DONT TOUCH CODE BELOW
 void ledsToColor()
 {
@@ -36,23 +39,20 @@ void ledsToColor()
     if (i % 4 == 0)
     {
       strip.setPixelColor(i, strip.Color(100, 30, 25));
-      strip.show();
     }
     else if (i % 4 == 1)
     {
       strip.setPixelColor(i, strip.Color(30, 25, 100));
-      strip.show();
     }
     else if (i % 4 == 3)
     {
       strip.setPixelColor(i, strip.Color(25, 100, 30));
-      strip.show();
     }
     else
     {
       strip.setPixelColor(i, strip.Color(100, 30, 25));
-      strip.show();
     }
+    strip.show();
   }
 }
 
@@ -61,14 +61,16 @@ void humidityData()
 {
   int humidityValueUpper = analogRead(PIN_HUMIDITYSENSOR_UPPER);
   int humidityValueLower = analogRead(PIN_HUMIDITYSENSOR_UPPER);
-  Serial.print("Humidity upper: ");
-  Serial.println(humidityValueUpper);
+  humSensorUpper.setValue(humidityValueUpper);
   humidityValueUpper = humidityValueConverter(humidityValueUpper);
-  Serial.println(humidityValueUpper);
-  Serial.print("Humidity lower: ");
-  Serial.println(humidityValueLower);
-  humidityValueLower = humidityValueConverter(humidityValueLower);
-  Serial.println(humidityValueLower);
+  Serial.print("Humidity upper: " + String(humidityValueUpper));
+
+  humSensorLower.setValue(humidityValueUpper);
+  humidityValueLower = humidityValueConverter(humidityValueUpper);
+  Serial.print("Humidity lower: " + String(humidityValueUpper));
+
+  std::vector<HaSensor> sensors = {humSensorUpper, humSensorLower};
+  connection.sendData("Sensor Eb en Vloed", sensors);
   delay(10000);
 }
 
@@ -76,8 +78,7 @@ void humidityData()
 int humidityValueConverter(int rawValue)
 {
   int percentage = map(rawValue, 1500, 3900, 100, 0);
-  percentage = constrain(percentage, 0, 100);
-  return percentage;
+  return constrain(percentage, 0, 100);
 }
 
 // TESTEN
@@ -206,6 +207,22 @@ void controlWaterPump(unsigned long duration)
   digitalWrite(PIN_PUMP, LOW);
   Serial.println("Pump off");
 }
+
+// CHECKEN
+
+void automaticProcess() {
+  if (!killswitchActive) {
+    handleButtonPress(1);
+    handleButtonPress(2);
+    handleButtonPress(3);
+    handleButtonPress(4);
+  }
+  digitalWrite(PIN_PUMP_VALVE, HIGH);
+  delay(1000);
+  digitalWrite(PIN_PUMP_VALVE, LOW);
+  delay(1000);
+}
+
 // TESTEN
 
 void setup()
@@ -214,51 +231,50 @@ void setup()
   Serial.println("Starting setup...");
 
   setTime(8,0,0,1,11,2024);
-
-  // Alarm.alarmRepeat(8, 0, 0, automaticProcess);
-  // Alarm.alarmRepeat(20, 0, 0, automaticProcess);  
   setupPins();
+
+  Alarm.alarmRepeat(8, 0, 0, automaticProcess);
+  Alarm.alarmRepeat(20, 0, 0, automaticProcess);  
+
+  connection = HaConnection(WIFI_SSID, WIFI_PASSWORD, 80, true);
+  connection.setup();
+
+  if (!connection.connected) {
+    return;
+  }
+
+  Serial.println("Setup complete");
+  Serial.println("Starting sensor setup");
+
+  humSensorUpper = HaSensor("Vochtigheid boven: ", SensorType::HUMIDITY);
+  humSensorLower = HaSensor("Vochtigheid beneden: ", SensorType::HUMIDITY);
+
+  connection.setup();
 }
 // TESTEN
 
 void loop()
 {
-  // checkKillSwitch();
-  // if(!killswitchActive){
-  //   Alarm.delay(0);
-  //   for (int i = 0; i < 6; i++) {
-  //     int reading = digitalRead(buttonPins[i]);
-  //     if (reading != lastButtonState[i]) {
-  //     previousMillis[i] = millis();
-  //   }
-  //   if ((millis() - previousMillis[i]) > debounceDelay) {
-  //     if (reading != buttonState[i]) {
-  //       buttonState[i] = reading;
-  //       if (buttonState[i] == LOW) {
-  //         handleButtonPress(i + 1);
-  //       }
-  //     }
-  //   }
-  //   lastButtonState[i] = reading;
-  // }
-  //   }
+  checkKillSwitch();
+  if(!killswitchActive){
+    Alarm.delay(0);
+    for (int i = 0; i < 6; i++) {
+      int reading = digitalRead(buttonPins[i]);
+      if (reading != lastButtonState[i]) {
+      previousMillis[i] = millis();
+    }
+    if ((millis() - previousMillis[i]) > debounceDelay) {
+      if (reading != buttonState[i]) {
+        buttonState[i] = reading;
+        if (buttonState[i] == LOW) {
+          handleButtonPress(i + 1);
+        }
+      }
+    }
+    lastButtonState[i] = reading;
+  }
+    }
   humidityData();
 }
-
-// CHECKEN
-
-// // Automatic process
-// // void automaticProcess() {
-// //   // if (!killswitchActive) {
-// //   //   handleButtonPress(1);
-// //   //   handleButtonPress(2);
-// //   //   handleButtonPress(3);
-// //   //   handleButtonPress(4);
-// //   // }
-// //   digitalWrite(PIN_PUMP_VALVE, HIGH);
-// //   delay(1000);
-// //   digitalWrite(PIN_PUMP_VALVE, LOW);
-// //   delay(1000);
-// // }
 
 
