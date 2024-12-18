@@ -263,33 +263,39 @@ void setup()
 }
 // TESTEN
 
+void pinPumpActive(){
+  digitalWrite(PIN_PUMP, HIGH);
+}
+
 void loop()
 {
-  checkKillSwitch();
-  if (!killswitchActive)
-  {
-    Alarm.delay(0);
-    for (int i = 0; i < 6; i++)
-    {
-      int reading = digitalRead(buttonPins[i]);
-      if (reading != lastButtonState[i])
-      {
-        previousMillis[i] = millis();
-      }
-      if ((millis() - previousMillis[i]) > debounceDelay)
-      {
-        if (reading != buttonState[i])
-        {
-          buttonState[i] = reading;
-          if (buttonState[i] == LOW)
-          {
-            handleButtonPress(i + 1);
-          }
-        }
-      }
-      lastButtonState[i] = reading;
-    }
-  }
-  humidityData();
+  // checkKillSwitch();
+  // if (!killswitchActive)
+  // {
+  //   Alarm.delay(0);
+  //   for (int i = 0; i < 6; i++)
+  //   {
+  //     int reading = digitalRead(buttonPins[i]);
+  //     if (reading != lastButtonState[i])
+  //     {
+  //       previousMillis[i] = millis();
+  //     }
+  //     if ((millis() - previousMillis[i]) > debounceDelay)
+  //     {
+  //       if (reading != buttonState[i])
+  //       {
+  //         buttonState[i] = reading;
+  //         if (buttonState[i] == LOW)
+  //         {
+  //           handleButtonPress(i + 1);
+  //         }
+  //       }
+  //     }
+  //     lastButtonState[i] = reading;
+  //   }
+  // }
+  // humidityData();
+
+  pinPumpActive();
 
 }

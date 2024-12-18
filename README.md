@@ -171,7 +171,7 @@ Als je code wilt aanpassen of nog eens wil herstarten, kan je [hier](/Project%20
 
 # Eindproduct
 
-![Eindproduct](/Afbeeldingen/eindproduct.jpg)
+![Eindproduct](Afbeeldingen/eindproduct.jpg)
 
 # Uitbreidingen
 
