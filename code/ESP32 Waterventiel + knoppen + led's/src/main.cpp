@@ -10,8 +10,8 @@
 // Define variables
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN_LEDSTRIP, NEO_GRB + NEO_KHZ800);
 unsigned long debounceDelay = 50;
-unsigned long pumpDelay = 5000;
-unsigned long valveDelay = 10000;
+unsigned long pumpDelay = 30000;
+unsigned long valveDelay = 60000;
 unsigned long valve90Seconds = 90000;
 unsigned long previousMillis[5] = {0, 0, 0, 0, 0};
 unsigned long valveTimer = 0;
@@ -25,14 +25,14 @@ bool killswitchActive = false;
 const int valvePins[5] = {PIN_PUMP_VALVE, PIN_VALVE_INPUT, PIN_VALVE_OUTPUT_UPPER, PIN_VALVE_OUTPUT_LOWER, PIN_VALVE_OUTPUT};
 const int buttonPins[6] = {PIN_INPUT_WATERTANK, PIN_INPUT_WATERPUMP, PIN_OUTPUT_WATER, PIN_OUTPUT_WATERTANK, PIN_LED, PIN_KILLSWITCH};
 
-extern HaSensor humSensorUpper("Vochtigheid boven: ", SensorType::HUMIDITY);
-extern HaSensor humSensorLower("Vochtigheid beneden: ", SensorType::HUMIDITY);
+HaSensor humSensorUpper;
+HaSensor humSensorLower;
 
 HaConnection connection;
 
-// DONT TOUCH CODE BELOW
 void ledsToColor()
 {
+  // Set all LEDs to a certain color
   digitalWrite(PIN_LEDSTRIP, HIGH);
   for (int i = 0; i < NUM_LEDS; i++)
   {
@@ -56,11 +56,14 @@ void ledsToColor()
   }
 }
 
-// WERKT NIET AANKOMEN
 void humidityData()
 {
-  int humidityValueUpper = analogRead(PIN_HUMIDITYSENSOR_UPPER);
-  int humidityValueLower = analogRead(PIN_HUMIDITYSENSOR_UPPER);
+  humSensorUpper = HaSensor("Vochtigheid boven: ", SensorType::HUMIDITY, 0, 100);
+  humSensorLower = HaSensor("Vochtigheid beneden: ", SensorType::HUMIDITY, 0, 100);
+  // Get the humidity values from the sensors and send it to Home Assistant
+  float humidityValueUpper = analogRead(PIN_HUMIDITYSENSOR_UPPER);
+  float humidityValueLower = analogRead(PIN_HUMIDITYSENSOR_UPPER);
+
   humSensorUpper.setValue(humidityValueUpper);
   humidityValueUpper = humidityValueConverter(humidityValueUpper);
   Serial.print("Humidity upper: " + String(humidityValueUpper));
@@ -69,29 +72,29 @@ void humidityData()
   humidityValueLower = humidityValueConverter(humidityValueUpper);
   Serial.print("Humidity lower: " + String(humidityValueUpper));
 
-  std::vector<HaSensor> sensors = {humSensorUpper, humSensorLower};
-  connection.sendData("Sensor Eb en Vloed", sensors);
+  connection.sendData("Sensors Eb en Vloed", {humSensorLower, humSensorUpper});
+
   delay(10000);
 }
 
-// WERKT NIET AANKOMEN
 int humidityValueConverter(int rawValue)
 {
-  int percentage = map(rawValue, 1500, 3900, 100, 0);
+  // Convert the raw value from the sensor to a percentage
+  float percentage = map(rawValue, 1500, 3900, 100, 0);
   return constrain(percentage, 0, 100);
 }
 
-// TESTEN
 void openValveForDuration(int valvePin, unsigned long duration)
 {
+  // Open a valve for a certain duration
   digitalWrite(valvePin, HIGH);
   delay(duration);
   digitalWrite(valvePin, LOW);
 }
 
-// TESTEN
 void openDoubleValveForDuration(int valvePin1, int valvePin2, unsigned long duration)
 {
+  // Open two valves for a certain duration
   digitalWrite(valvePin1, HIGH);
   digitalWrite(valvePin2, HIGH);
   delay(duration);
@@ -99,13 +102,13 @@ void openDoubleValveForDuration(int valvePin1, int valvePin2, unsigned long dura
   digitalWrite(valvePin2, LOW);
 }
 
-// TESTEN
 void handleButtonPress(int button)
 {
   if (killswitchActive)
   {
     return;
   }
+  // Handle the button press
   switch (button)
   {
   case 1:
@@ -143,9 +146,9 @@ void handleButtonPress(int button)
   }
 }
 
-// CHECKEN
 void checkKillSwitch()
 {
+  // Check if the killswitch is activated
   int switchState = digitalRead(PIN_KILLSWITCH);
   if (switchState == HIGH && !killswitchActive)
   {
@@ -158,10 +161,10 @@ void checkKillSwitch()
     Serial.println("Killswitch deactivated");
   }
 }
-// CHECKEN
 
 void killSwitch()
 {
+  // Kill all processes
   for (int i = 0; i < 5; i++)
   {
     digitalWrite(valvePins[i], LOW);
@@ -170,10 +173,9 @@ void killSwitch()
   strip.show();
 }
 
-// CHECKEN
-
 void setupPins()
 {
+  // Setup the pins
   for (int i = 0; i < 6; i++)
   {
     pinMode(buttonPins[i], INPUT);
@@ -194,35 +196,45 @@ void setupPins()
   strip.show();
 }
 
-// TESTEN
 void controlWaterPump(unsigned long duration)
 {
-  digitalWrite(PIN_PUMP, HIGH); 
+  // Turn pump on and valve
+  digitalWrite(PIN_PUMP, HIGH);
   Serial.println("Pump on & Valve open");
   digitalWrite(PIN_VALVE_OUTPUT, HIGH);
   delay(duration);
+  // close valve
   Serial.println("Valve closed");
   digitalWrite(PIN_VALVE_OUTPUT, LOW);
   delay(duration);
+  // turn pump off
   digitalWrite(PIN_PUMP, LOW);
   Serial.println("Pump off");
 }
 
-// CHECKEN
-
-void automaticProcess() {
-  if (!killswitchActive) {
+void automaticProcess()
+{
+  // Run the automatic process if killswitch is not active
+  if (!killswitchActive)
+  {
     handleButtonPress(1);
     handleButtonPress(2);
     handleButtonPress(3);
     handleButtonPress(4);
   }
-  digitalWrite(PIN_PUMP_VALVE, HIGH);
-  delay(1000);
-  digitalWrite(PIN_PUMP_VALVE, LOW);
-  delay(1000);
 }
 
+void checkValvesAndPump() {    
+    for (int i = 0; i < 5; i++) {
+        digitalWrite(valvePins[i], HIGH); // Open valve
+        delay(1000); // Wait for 1 second
+        digitalWrite(valvePins[i], LOW); // Close valve
+    }
+    
+    digitalWrite(PIN_PUMP, HIGH); // Turn on pump
+    delay(5000); // Wait for 5 seconds
+    digitalWrite(PIN_PUMP, LOW); // Turn off pump
+}
 // TESTEN
 
 void setup()
@@ -230,24 +242,22 @@ void setup()
   Serial.begin(115200);
   Serial.println("Starting setup...");
 
-  setTime(8,0,0,1,11,2024);
+  setTime(8, 0, 0, 1, 11, 2024);
   setupPins();
 
-  Alarm.alarmRepeat(8, 0, 0, automaticProcess);
-  Alarm.alarmRepeat(20, 0, 0, automaticProcess);  
+  // Alarm.alarmRepeat(8, 0, 0, automaticProcess);
+  // Alarm.alarmRepeat(20, 0, 0, automaticProcess);
 
-  connection = HaConnection(WIFI_SSID, WIFI_PASSWORD, 80, true);
+  connection = HaConnection(WIFI_SSID, WIFI_PASSWORD, "10.10.2.20", 8123);
   connection.setup();
 
-  if (!connection.connected) {
+  if (!connection.connected)
+  {
     return;
   }
 
   Serial.println("Setup complete");
   Serial.println("Starting sensor setup");
-
-  humSensorUpper = HaSensor("Vochtigheid boven: ", SensorType::HUMIDITY);
-  humSensorLower = HaSensor("Vochtigheid beneden: ", SensorType::HUMIDITY);
 
   connection.setup();
 }
@@ -256,25 +266,30 @@ void setup()
 void loop()
 {
   checkKillSwitch();
-  if(!killswitchActive){
+  if (!killswitchActive)
+  {
     Alarm.delay(0);
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++)
+    {
       int reading = digitalRead(buttonPins[i]);
-      if (reading != lastButtonState[i]) {
-      previousMillis[i] = millis();
-    }
-    if ((millis() - previousMillis[i]) > debounceDelay) {
-      if (reading != buttonState[i]) {
-        buttonState[i] = reading;
-        if (buttonState[i] == LOW) {
-          handleButtonPress(i + 1);
+      if (reading != lastButtonState[i])
+      {
+        previousMillis[i] = millis();
+      }
+      if ((millis() - previousMillis[i]) > debounceDelay)
+      {
+        if (reading != buttonState[i])
+        {
+          buttonState[i] = reading;
+          if (buttonState[i] == LOW)
+          {
+            handleButtonPress(i + 1);
+          }
         }
       }
+      lastButtonState[i] = reading;
     }
-    lastButtonState[i] = reading;
   }
-    }
   humidityData();
+
 }
-
-
