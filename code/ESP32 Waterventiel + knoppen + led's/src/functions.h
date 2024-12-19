@@ -8,11 +8,11 @@
 
 //define buttons
 #define PIN_INPUT_WATERTANK 36
-#define PIN_INPUT_WATERPUMP 34
-#define PIN_OUTPUT_WATER 32
+#define PIN_INPUT_WATERPUMP 39
+#define PIN_OUTPUT_WATER 34
 #define PIN_OUTPUT_WATERTANK 35
-#define PIN_LED 33
-#define PIN_KILLSWITCH 39
+#define PIN_LED 32
+#define PIN_KILLSWITCH 33
 
 //define LED strip
 #define PIN_LEDSTRIP 23 
@@ -23,14 +23,14 @@
 #define PIN_VALVE_INPUT 4
 #define PIN_VALVE_OUTPUT_UPPER 16
 #define PIN_VALVE_OUTPUT_LOWER 17
-#define PIN_VALVE_OUTPUT 5
+#define PIN_VALVE_OUTPUT 15
 
 //define pump
-#define PIN_PUMP 15
+#define PIN_PUMP 5
 
 //define humiditysensor
-#define PIN_HUMIDITYSENSOR_UPPER 25 
-#define PIN_HUMIDITYSENSOR_LOWER 26
+#define PIN_HUMIDITYSENSOR_UPPER 26 
+#define PIN_HUMIDITYSENSOR_LOWER 25
 
 // Define variables
 extern Adafruit_NeoPixel strip;

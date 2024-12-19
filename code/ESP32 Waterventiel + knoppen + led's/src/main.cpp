@@ -10,7 +10,7 @@
 // Define variables
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN_LEDSTRIP, NEO_GRB + NEO_KHZ800);
 unsigned long debounceDelay = 50;
-unsigned long pumpDelay = 30000;
+unsigned long pumpDelay = 2000;
 unsigned long valveDelay = 60000;
 unsigned long valve90Seconds = 90000;
 unsigned long previousMillis[5] = {0, 0, 0, 0, 0};
@@ -102,48 +102,65 @@ void openDoubleValveForDuration(int valvePin1, int valvePin2, unsigned long dura
   digitalWrite(valvePin2, LOW);
 }
 
-void handleButtonPress(int button)
+void handleButtonPress()
 {
   if (killswitchActive)
   {
     return;
   }
   // Handle the button press
-  switch (button)
+  if(digitalRead(PIN_INPUT_WATERTANK) == HIGH)
   {
-  case 1:
-    // Water in de tank
     Serial.println("Pump valve opened");
-    openValveForDuration(PIN_PUMP_VALVE, valveDelay);
+        digitalWrite(PIN_VALVE_INPUT, HIGH);
+    digitalWrite(PIN_PUMP_VALVE, HIGH);
     Serial.println("Pump valve closed");
-    break;
-  case 2:
-    // Water naar de bakken
-    Serial.println("Output valve opened");
-    controlWaterPump(pumpDelay);
-    Serial.println("Output valve closed");
-    break;
-  case 3:
-    // Water uit bakken
+  }else{
+        digitalWrite(PIN_VALVE_INPUT, LOW);
+
+  } 
+
+  if (digitalRead(PIN_INPUT_WATERPUMP) == HIGH)
+  {
+        digitalWrite(PIN_PUMP_VALVE, HIGH);
+
+
+  }else{
+    digitalWrite(PIN_PUMP_VALVE, LOW);
+  }
+
+  if(digitalRead(PIN_OUTPUT_WATER) == HIGH){
     Serial.println("Output valves opened");
-    openDoubleValveForDuration(PIN_VALVE_OUTPUT_UPPER, PIN_VALVE_OUTPUT_LOWER, valveDelay);
+    digitalWrite(PIN_VALVE_OUTPUT_UPPER, HIGH);
+    digitalWrite(PIN_VALVE_OUTPUT_LOWER, HIGH);
     Serial.println("Output valves closed");
-  case 4:
-    // OUTPUT VENTIEL 5
-    openValveForDuration(PIN_VALVE_OUTPUT, valveDelay);
+  }else{
+    digitalWrite(PIN_VALVE_OUTPUT_UPPER, LOW);
+    digitalWrite(PIN_VALVE_OUTPUT_LOWER, LOW);
+  }
+
+  if(digitalRead(PIN_OUTPUT_WATERTANK) == HIGH){
+    digitalWrite(PIN_VALVE_OUTPUT, HIGH);
     Serial.println("Input valve opened");
-    break;
-  case 5:
-    // Toggle the LED strip
+  }else{
+    digitalWrite(PIN_VALVE_OUTPUT, LOW);
+  }
+  
+  if(digitalRead(PIN_LED) == HIGH){
     ledsToColor();
     Serial.println("LED strip toggled");
-    break;
-  case 6:
-    // Kills all processes
+  }else{
+    strip.clear();
+    strip.show();
+  }
+
+  if(digitalRead(PIN_KILLSWITCH) == HIGH){
     killSwitch();
     Serial.println("Killswitch activated");
-    break;
+  }else if(digitalRead(PIN_KILLSWITCH) == LOW){
+    Serial.println("Killswitch deactivated");
   }
+
 }
 
 void checkKillSwitch()
@@ -194,6 +211,8 @@ void setupPins()
   pinMode(PIN_HUMIDITYSENSOR_LOWER, INPUT);
   strip.begin();
   strip.show();
+
+  
 }
 
 void controlWaterPump(unsigned long duration)
@@ -201,11 +220,11 @@ void controlWaterPump(unsigned long duration)
   // Turn pump on and valve
   digitalWrite(PIN_PUMP, HIGH);
   Serial.println("Pump on & Valve open");
-  digitalWrite(PIN_VALVE_OUTPUT, HIGH);
+  // digitalWrite(PIN_VALVE_OUTPUT, HIGH);
   delay(duration);
   // close valve
-  Serial.println("Valve closed");
-  digitalWrite(PIN_VALVE_OUTPUT, LOW);
+  // Serial.println("Valve closed");
+  // digitalWrite(PIN_VALVE_OUTPUT, LOW);
   delay(duration);
   // turn pump off
   digitalWrite(PIN_PUMP, LOW);
@@ -217,25 +236,36 @@ void automaticProcess()
   // Run the automatic process if killswitch is not active
   if (!killswitchActive)
   {
-    handleButtonPress(1);
-    handleButtonPress(2);
-    handleButtonPress(3);
-    handleButtonPress(4);
+    // handleButtonPress(1);
+    // handleButtonPress(2);
+    // handleButtonPress(3);
+    // handleButtonPress(4);
   }
 }
 
-void checkValvesAndPump() {    
+void registerAndHandleButtonPresses() {
     for (int i = 0; i < 5; i++) {
-        digitalWrite(valvePins[i], HIGH); // Open valve
-        delay(1000); // Wait for 1 second
-        digitalWrite(valvePins[i], LOW); // Close valve
+        int reading = digitalRead(buttonPins[i]);
+        if (reading != lastButtonState[i] && millis() - previousMillis[i] > debounceDelay) {
+            previousMillis[i] = millis();
+            lastButtonState[i] = reading;
+            if (reading == HIGH) {
+                handleButtonPress(i + 1);
+            }
+        }
     }
-    
-    digitalWrite(PIN_PUMP, HIGH); // Turn on pump
-    delay(5000); // Wait for 5 seconds
-    digitalWrite(PIN_PUMP, LOW); // Turn off pump
 }
-// TESTEN
+
+void openValve(int valvePin)
+{
+  digitalWrite(valvePin, HIGH);
+  delay(1000);
+  digitalWrite(valvePin, LOW);
+  delay(1000);
+  
+  // Open a valve
+
+}
 
 void setup()
 {
@@ -261,41 +291,39 @@ void setup()
 
   connection.setup();
 }
-// TESTEN
-
-void pinPumpActive(){
-  digitalWrite(PIN_PUMP, HIGH);
-}
 
 void loop()
 {
-  // checkKillSwitch();
+  checkKillSwitch();
   // if (!killswitchActive)
   // {
-  //   Alarm.delay(0);
-  //   for (int i = 0; i < 6; i++)
+  //   if(digitalRead(PIN_LED) == HIGH)
   //   {
-  //     int reading = digitalRead(buttonPins[i]);
-  //     if (reading != lastButtonState[i])
-  //     {
-  //       previousMillis[i] = millis();
-  //     }
-  //     if ((millis() - previousMillis[i]) > debounceDelay)
-  //     {
-  //       if (reading != buttonState[i])
-  //       {
-  //         buttonState[i] = reading;
-  //         if (buttonState[i] == LOW)
-  //         {
-  //           handleButtonPress(i + 1);
-  //         }
-  //       }
-  //     }
-  //     lastButtonState[i] = reading;
+  //     ledsToColor();
+  //     Serial.println("LED strip toggled");
+  //   }else if(digitalRead(PIN_LED) == LOW)
+  //   {
+  //     Serial.println("LED strip not toggled");
   //   }
   // }
-  // humidityData();
+  //humidityData();
 
-  pinPumpActive();
+  //   controlWaterPump(pumpDelay);
+  //   openDoubleValveForDuration(PIN_VALVE_OUTPUT_UPPER, PIN_VALVE_OUTPUT_LOWER, valveDelay);
+  //   openValveForDuration(PIN_VALVE_OUTPUT, valveDelay);
+
+  // openValve(PIN_PUMP_VALVE);
+  // openValve(PIN_VALVE_INPUT);
+  // openValve(PIN_VALVE_OUTPUT_UPPER);
+  // openValve(PIN_VALVE_OUTPUT_LOWER);
+  // openValve(PIN_VALVE_OUTPUT);
+
+  // if(digitalRead(PIN_LED) == HIGH){
+  //   ledsToColor();
+  // }
+
+  handleButtonPress();
 
 }
+
+
